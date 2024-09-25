@@ -73,7 +73,7 @@ python app.py
 
 **Login**
 
-![alt text](image-1.png)
+![alt text](screenshots/image-1.png)
 
 εδώ βάζουμε τα στοιχεία μας και μεταβιβαζόμαστε στο αντίστοιχο dashboard
 
