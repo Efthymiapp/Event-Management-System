@@ -382,7 +382,10 @@ def create_event():
     }
     mongo.db.events.insert_one(event)
     
-    return redirect(url_for('user_dashboard', user_id=user_id))
+    if user_id == "admin":
+        return redirect(url_for('admin_dashboard'))
+    else:
+        return redirect(url_for('user_dashboard', user_id=user_id))
 
 ### Edit Event (User Can Only Edit Their Own Events) ###
 @app.route('/events/<event_id>/edit', methods=['POST'])
