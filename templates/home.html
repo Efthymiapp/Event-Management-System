@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+    
+    <style>
+        /* Global Styles */
+        body {
+            background-color: #ac69b8;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        /* Center container */
+        .home-container {
+            text-align: center;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(92, 99, 105, 0.2);
+            color: #333;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-size: 36px;
+        }
+
+        /* Button styles */
+        a button {
+            background-color: #52075c;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+
+        a button:hover {
+            background-color: #9867C5;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="home-container">
+        <h1>Welcome to the Event Management System</h1>
+        <a href="{{ url_for('login') }}"><button>Login</button></a>
+        <a href="{{ url_for('register') }}"><button>Register</button></a>
+    </div>
+
+</body>
+</html>

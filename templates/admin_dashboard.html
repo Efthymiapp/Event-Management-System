@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin Dashboard</title>
+
+    <style>
+        /* Global styles */
+        body {
+            text-align: center;
+            background-color: #ac69b8;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: rgb(168, 52, 156);
+        }
+
+        h3 {
+            text-align: center;
+            color: #52075c;
+        }
+
+        /* Admin dashboard container */
+        .dashboard-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(92, 99, 105, 0.2);
+        }
+
+        /* Style for the list of users and events */
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 10px;
+        }
+
+        li {
+            background-color: #f7f7f7;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 5px; 
+            padding: 8px 12px; 
+            border-radius: 30px; 
+            display: inline-block; 
+            max-width: 100%; 
+        }
+
+        li strong {
+            font-size: 1.2em;
+        }
+
+        .event-info, .user-info {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Participant list inside the event */
+        .participant-list ul {
+            padding-left: 20px;
+        }
+
+        /* Button styles */
+        button {
+            background-color: #52075c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 80%; 
+            max-width: 300px; 
+            margin-top: 5px;
+            margin-bottom: -20px;
+        }
+
+        button:hover {
+            background-color: #9867C5;
+            transform: translateY(-2px);
+        }
+
+        /* Form styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, textarea, select {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #DADCE0;
+            border-radius: 7px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border: 2px solid rgb(238, 0, 255);
+        }
+
+        /* Go back to home button */
+        .home-btn {
+            display: block;
+            margin: 0 auto;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .flash-messages {
+            margin: 20px auto;
+            max-width: 900px;
+            padding: 10px;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .alert.success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+
+        .alert.error {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+
+    </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+        <div class="alert {{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+    <div class="dashboard-container">
+        <h3>Admin Dashboard</h3>
+
+        <h2>Users</h2>
+        <ul>
+            {% for user in users %}
+                <li class="user-info">
+                    <strong>{{ user.username }}</strong> - {{ user.email }}
+                    <form action="{{ url_for('admin_delete_user', user_id=user._id) }}" method="POST">
+                        <button type="submit">Delete User</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+        <div class="dashboard-container">
+            <h2>Search Events</h2>
+            <form class="search-form" action="{{ url_for('admin_dashboard', user_id="admin" ) }}" method="POST">
+                <label for="search-title">Search by Title:</label>
+                <input type="text" id="search-title" name="search_title" placeholder="Enter event title">
+    
+                <label for="search-type">Search by Type:</label>
+                <select id="search-type" name="search_type">
+                    <option value="">All Types</option>
+                    <option value="meet up">Meet Up</option>
+                    <option value="conference">Conference</option>
+                    <option value="party">Party</option>
+                    <option value="festival">Festival</option>
+                </select>
+    
+                <label for="search-location">Search by Location:</label>
+                <input type="text" id="search-location" name="search_location" placeholder="Enter location">
+    
+                <button type="submit">Search</button>
+            </form>
+        
+        <h2>All Events</h2>
+        <ul>
+            {% for event in events %}
+                <li>
+                    <div class="event-info">
+                        <strong>{{ event.name }}</strong> - {{ event.description }}<br>
+                        Date: {{ event.date }} | Time: {{ event.time }}<br>
+                        Location: {{ event.location }} | Type: {{ event.type }}<br>
+                        Created by: {{ event.creator_username }}<br>
+                    </div>
+                    <div class="participant-list">
+                        <h3>Interested Users:</h3>
+                        <ul>
+                            {% for username in event.participant_usernames %}
+                                <li>{{ 'Admin' if username == 'admin' else username }}</li>
+                            {% endfor %}
+                        </ul>
+                        <h3>Maybe Users:</h3>
+                        <ul>
+                            {% for username in event.maybe_usernames %}
+                                <li>{{ 'Admin' if username == 'admin' else username }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <form action="{{ url_for('participate_event', event_id=event._id) }}" method="POST">
+                        <input type="hidden" name="user_id" value="admin">
+                        <button type="submit">I'm Interested</button>
+                    </form>
+                    
+                    <form action="{{ url_for('maybe_participate_event', event_id=event._id) }}" method="POST">
+                        <input type="hidden" name="user_id" value="admin">
+                        <button type="submit">Maybe</button>
+                    </form>
+                    
+                    <form action="{{ url_for('admin_delete_event', event_id=event._id) }}" method="POST">
+                        <button type="submit">Delete Event</button>
+                    </form>
+                        {% if event.creator_id == 'admin' %}
+                            <!-- Hidden form for updating the event -->
+                            <form id="edit-form-{{ event._id }}" action="{{ url_for('admin_update_event', event_id=event._id) }}" method="POST" class="hidden">
+                                <label for="name">Event Name:</label>
+                                <input type="text" name="name" value="{{ event.name }}" required>
+
+                                <label for="description">Description:</label>
+                                <textarea name="description" required>{{ event.description }}</textarea>
+
+                                <label for="date">Date:</label>
+                                <input type="date" name="date" value="{{ event.date }}" required>
+
+                                <label for="time">Time:</label>
+                                <input type="time" name="time" value="{{ event.time }}" required>
+
+                                <label for="location">Location:</label>
+                                <input type="text" name="location" value="{{ event.location }}" required>
+
+                                <label for="type">Event Type:</label>
+                                <select name="type" required>
+                                    <option value="meet up" {% if event.type == 'meet up' %}selected{% endif %}>Meet Up</option>
+                                    <option value="conference" {% if event.type == 'conference' %}selected{% endif %}>Conference</option>
+                                    <option value="party" {% if event.type == 'party' %}selected{% endif %}>Party</option>
+                                    <option value="festival" {% if event.type == 'festival' %}selected{% endif %}>Festival</option>
+                                </select>
+                                
+                                <button type="submit">Update Event</button>
+                            </form>
+                        {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+        </div>
+        <div class="dashboard-container">
+        <h2>Create a New Event</h2>
+        <form action="{{ url_for('create_event') }}" method="POST">
+            <input type="hidden" name="user_id" value="admin">
+            <label>Name:</label>
+            <input type="text" name="name" required>
+            <label>Description:</label>
+            <textarea name="description" required></textarea>
+            <label>Date:</label>
+            <input type="date" name="date" required>
+            <label>Time:</label>
+            <input type="time" name="time" required>
+            <label>Location:</label>
+            <input type="text" name="location" required>
+            <label>Type:</label>
+            <select name="type" required>
+                <option value="meet up">Meet Up</option>
+                <option value="conference">Conference</option>
+                <option value="party">Party</option>
+                <option value="festival">Festival</option>
+            </select>
+            <button type="submit">Create Event</button>
+        </form>
+        
+        <div class="home-btn">
+            <a href="{{ url_for('home') }}">
+                <button>Go Back to Home</button>
+            </a>
+        </div>
+</div>
+<script>
+    function toggleEditForm(eventId) {
+        const form = document.getElementById('edit-form-' + eventId);
+        if (form.classList.contains('hidden')) {
+            form.classList.remove('hidden');
+        } else {
+            form.classList.add('hidden');
+        }
+    }
+</script>
+
+</body>
+</html>
