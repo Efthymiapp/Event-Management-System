@@ -337,19 +337,6 @@ def view_event(event_id):
         flash("Event not found!", "error")
         return redirect(url_for('user_dashboard', user_id=request.args.get('user_id')))
 
-@app.route('/events', methods=['GET'])
-def show_events():
-    # Παίρνουμε τη σημερινή ημερομηνία και ώρα
-    today = datetime.now()
-
-    # Φιλτράρουμε τις εκδηλώσεις που έχουν ημερομηνία μεγαλύτερη ή ίση με σήμερα
-    upcoming_events = mongo.db.events.find({"date": {"$gte": today}})
-    
-    # Τυπώνουμε τη σημερινή ημερομηνία για debugging
-    formatted_time = today.strftime("%d/%m/%Y %H:%M:%S")
-    print("Η σημερινή ημερομηνία και ώρα είναι:", formatted_time)
-    
-    return render_template('events.html', events=upcoming_events)
 
 ### Create Event (for Admins and Users) ###
 @app.route('/events/create', methods=['POST'])
@@ -385,7 +372,7 @@ def create_event():
     event = {
         'name': request.form['name'],
         'description': request.form['description'],
-        'date': event_datetime,  # Αποθήκευση ως datetime στη MongoDB
+        'date': event_date,  # Αποθήκευση ως datetime στη MongoDB
         'location': request.form['location'],
         'type': request.form['type'],
         'creator_id': creator_id,  # Admin or user
@@ -395,7 +382,7 @@ def create_event():
     }
     mongo.db.events.insert_one(event)
     
-    return redirect(url_for('show_events'))
+    return redirect(url_for('user_dashboard', user_id=user_id))
 
 ### Edit Event (User Can Only Edit Their Own Events) ###
 @app.route('/events/<event_id>/edit', methods=['POST'])
