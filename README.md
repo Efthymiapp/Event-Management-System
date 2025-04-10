@@ -77,6 +77,7 @@ python app.py
 εδώ βάζουμε τα στοιχεία μας και μεταβιβαζόμαστε στο αντίστοιχο dashboard
 
 **Admin Dashboard**
+
 ![alt text](screenshots/image-2.png)
 ![alt text](screenshots/image-4.png)
 ![alt text](screenshots/image-5.png)
@@ -84,6 +85,7 @@ python app.py
 Στο συγκεκριμένο dashboard που ανήκει στον admin παρατηρούμε όλα τα commands που μπορεί να εκτελέσει. Πιο συγκεκριμένα μπορεί να δει όλους τους χρήστες και να διαγράψει όποιον θέλει , μπορεί να ψάξει οποιοδήποτε event επιθυμεί στο search, να δει όλα τα events απευθείας, να διαγράψει οποιοδήποτε event θέλει, να κανει update μονάχα αυτά που έχει δημιουργήσει ο ίδιος και τέλος να κατασκευάσει ένα νέο event. 
 
 **User Dashboard**
+
 ![alt text](screenshots/image-6.png)
 ![alt text](screenshots/image-7.png)
 ![alt text](screenshots/image-8.png)
